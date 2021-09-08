@@ -1,5 +1,8 @@
 # yamlenums
 
+[![Build Status](https://api.travis-ci.com/igrmk/yamlenums.svg)](https://app.travis-ci.com/github/igrmk/yamlenums)
+[![GoReportCard](https://goreportcard.com/badge/igrmk/yamlenums)](https://goreportcard.com/report/igrmk/yamlenums)
+
 yamlenums is a tool to automate the creation of methods that satisfy the
 `yaml.Marshaler` and `yaml.Unmarshaler` interfaces.
 Given the name of a (signed or unsigned) integer type T that has constants
