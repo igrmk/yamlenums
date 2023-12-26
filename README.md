@@ -9,8 +9,8 @@ Given the name of a (signed or unsigned) integer type T that has constants
 defined, yamlenums will create a new self-contained Go source file implementing
 
 ```
-func (t T) MarshalYAML() ([]byte, error)
-func (t *T) UnmarshalYAML(unmarshal func(v interface{}) error) error
+func (t T) MarshalYAML() (interface{}, error)
+func (t *T) UnmarshalYAML(value *yaml.Node) error
 ```
 
 The file is created in the same package and directory as the package that
@@ -47,13 +47,13 @@ in the same directory will create the file `pill_yamlenums.go`, in package
 `painkiller`, containing a definition of
 
 ```
-func (r Pill) MarshalYAML() ([]byte, error)
-func (r *Pill) UnmarshalYAML(unmarshal func(v interface{}) error) error
+func (r Pill) MarshalYAML() (interface{}, error)
+func (r *Pill) UnmarshalYAML(value *yaml.Node) error
 ```
 
-`MarshalYAML` will translate the value of a `Pill` constant to the `[]byte`
+`MarshalYAML` will translate the value of a `Pill` constant to the `string`
 representation of the respective constant name, so that the call
-`yaml.Marshal(painkiller.Aspirin)` will return the bytes `[]byte("\"Aspirin\"")`.
+`yaml.Marshal(painkiller.Aspirin)` will return bytes of the string `Aspirin`.
 
 `UnmarshalYAML` performs the opposite operation;
 it unmarshals underlying bytes to a string, given the string

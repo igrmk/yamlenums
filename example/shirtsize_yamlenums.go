@@ -43,26 +43,22 @@ func init() {
 }
 
 // MarshalYAML is generated so ShirtSize satisfies yaml.Marshaler.
-func (r ShirtSize) MarshalYAML() ([]byte, error) {
+func (r ShirtSize) MarshalYAML() (interface{}, error) {
 	if s, ok := interface{}(r).(fmt.Stringer); ok {
-		return yaml.Marshal(s.String())
+		return s.String(), nil
 	}
 	s, ok := _ShirtSizeValueToName[r]
 	if !ok {
 		return nil, fmt.Errorf("invalid ShirtSize: %d", r)
 	}
-	return yaml.Marshal(s)
+	return s, nil
 }
 
 // UnmarshalYAML is generated so ShirtSize satisfies yaml.Unmarshaler.
-func (r *ShirtSize) UnmarshalYAML(unmarshal func(v interface{}) error) error {
-	var s string
-	if err := unmarshal(&s); err != nil {
-		return fmt.Errorf("ShirtSize should be a string")
-	}
-	v, ok := _ShirtSizeNameToValue[s]
+func (r *ShirtSize) UnmarshalYAML(value *yaml.Node) error {
+	v, ok := _ShirtSizeNameToValue[value.Value]
 	if !ok {
-		return fmt.Errorf("invalid ShirtSize %q", s)
+		return fmt.Errorf("invalid ShirtSize %q", value.Value)
 	}
 	*r = v
 	return nil

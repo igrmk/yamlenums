@@ -80,9 +80,9 @@ func main() {
 		log.Fatal(err)
 	}
 
-	input := `{"Size":"XL", "Day":"Dimarts"}`
+	input := "size: XL\nday: Dimarts"
 	if err := yaml.NewDecoder(strings.NewReader(input)).Decode(&v); err != nil {
 		log.Fatal(err)
 	}
-	fmt.Printf("decoded %s as %+v\n", input, v)
+	fmt.Printf("decoded %q as %+v\n", input, v)
 }

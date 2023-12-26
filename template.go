@@ -54,26 +54,22 @@ func init() {
 }
 
 // MarshalYAML is generated so {{$typename}} satisfies yaml.Marshaler.
-func (r {{$typename}}) MarshalYAML() ([]byte, error) {
+func (r {{$typename}}) MarshalYAML() (interface{}, error) {
     if s, ok := interface{}(r).(fmt.Stringer); ok {
-        return yaml.Marshal(s.String())
+        return s.String(), nil
     }
     s, ok := _{{$typename}}ValueToName[r]
     if !ok {
         return nil, fmt.Errorf("invalid {{$typename}}: %d", r)
     }
-    return yaml.Marshal(s)
+    return s, nil
 }
 
 // UnmarshalYAML is generated so {{$typename}} satisfies yaml.Unmarshaler.
-func (r *{{$typename}}) UnmarshalYAML(unmarshal func(v interface{}) error) error {
-    var s string
-	if err := unmarshal(&s); err != nil {
-		return fmt.Errorf("{{$typename}} should be a string")
-	}
-	v, ok := _{{$typename}}NameToValue[s]
+func (r *{{$typename}}) UnmarshalYAML(value *yaml.Node) error {
+	v, ok := _{{$typename}}NameToValue[value.Value]
 	if !ok {
-		return fmt.Errorf("invalid {{$typename}} %q", s)
+		return fmt.Errorf("invalid {{$typename}} %q", value.Value)
 	}
 	*r = v
 	return nil
