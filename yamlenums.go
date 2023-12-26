@@ -13,13 +13,12 @@
 // limitations under the License.
 
 // YAMLenums is a tool to automate the creation of methods that satisfy the
-// fmt.Stringer, yaml.Marshaler and yaml.Unmarshaler interfaces.
+// yaml.Marshaler and yaml.Unmarshaler interfaces.
 // Given the name of a (signed or unsigned) integer type T that has constants
 // defined, yamlenums will create a new self-contained Go source file implementing
 //
-//  func (t T) String() string
-//  func (t T) MarshalYAML() ([]byte, error)
-//  func (t *T) UnmarshalYAML([]byte) error
+//  func (t T) MarshalYAML() (interface{}, error)
+//  func (t *T) UnmarshalYAML(value *yaml.Node) error
 //
 // The file is created in the same package and directory as the package that defines T.
 // It has helpful defaults designed for use with go generate.
@@ -48,13 +47,12 @@
 // in the same directory will create the file pill_yamlenums.go, in package painkiller,
 // containing a definition of
 //
-//  func (r Pill) String() string
-//  func (r Pill) MarshalYAML() ([]byte, error)
-//  func (r *Pill) UnmarshalYAML([]byte) error
+//  func (r Pill) MarshalYAML() (interface{}, error)
+//  func (r *Pill) UnmarshalYAML(value *yaml.Node) error
 //
 // That method will translate the value of a Pill constant to the string representation
-// of the respective constant name, so that the call fmt.Print(painkiller.Aspirin) will
-// print the string "Aspirin".
+// of the respective constant name, so that the painkiller.Aspirin will be marshaled to
+// YAML as the string Aspirin and can be unmarshaled from that string.
 //
 // Typically this process would be run using go generate, like this:
 //

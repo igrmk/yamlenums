@@ -46,26 +46,22 @@ func init() {
 }
 
 // MarshalYAML is generated so WeekDay satisfies yaml.Marshaler.
-func (r WeekDay) MarshalYAML() ([]byte, error) {
+func (r WeekDay) MarshalYAML() (interface{}, error) {
 	if s, ok := interface{}(r).(fmt.Stringer); ok {
-		return yaml.Marshal(s.String())
+		return s.String(), nil
 	}
 	s, ok := _WeekDayValueToName[r]
 	if !ok {
 		return nil, fmt.Errorf("invalid WeekDay: %d", r)
 	}
-	return yaml.Marshal(s)
+	return s, nil
 }
 
 // UnmarshalYAML is generated so WeekDay satisfies yaml.Unmarshaler.
-func (r *WeekDay) UnmarshalYAML(unmarshal func(v interface{}) error) error {
-	var s string
-	if err := unmarshal(&s); err != nil {
-		return fmt.Errorf("WeekDay should be a string")
-	}
-	v, ok := _WeekDayNameToValue[s]
+func (r *WeekDay) UnmarshalYAML(value *yaml.Node) error {
+	v, ok := _WeekDayNameToValue[value.Value]
 	if !ok {
-		return fmt.Errorf("invalid WeekDay %q", s)
+		return fmt.Errorf("invalid WeekDay %q", value.Value)
 	}
 	*r = v
 	return nil
